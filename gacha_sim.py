@@ -161,12 +161,19 @@ if st.button("開始模擬！"):
     for item in result["five_star_history"]:
         st.write(f"第 {item['draw']} 抽 - {item['type']}（距上次5★ {item['pity']} 抽）")
 
-st.subheader("📜 過往模擬記錄（最多顯示5次）")
-for i, record in enumerate(reversed(st.session_state["history"][-5:]), 1):
-    # 安全存取舊資料格式
-    up = record.get("UP角色", record.get("A", 0))
-    standard = record.get("常駐角色", record.get("B", 0))
-    four_star = record.get("4star", 0)
-    st.write(f"第 {-i} 次模擬：UP={up} 常駐={standard} 4★={four_star}")
+st.subheader("📜 過往模擬記錄")
+if st.checkbox("顯示最近 5 次模擬紀錄"):
+    for i, record in enumerate(reversed(st.session_state["history"][-5:]), 1):
+        up = record.get("UP角色", record.get("A", 0))
+        standard = record.get("常駐角色", record.get("B", 0))
+        four_star = record.get("4star", 0)
+        extra_draws = record.get("extra_draws_from_stardust", 0)
+        total_used = record.get("total_draws_used", "?")
+        five_star_draws = record.get("five_star_history", [])
 
+        with st.expander(f"第 {-i} 次模擬：共 {total_used} 抽（UP={up} 常駐={standard} 4★={four_star}）"):
+            st.write(f"星輝免費抽次數：{extra_draws}")
+            st.write("出金紀錄：")
+            for item in five_star_draws:
+                st.write(f"🎯 第 {item['draw']} 抽 - {item['type']}（距上次5★ {item['pity']} 抽）")
 
