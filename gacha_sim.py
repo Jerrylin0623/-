@@ -25,7 +25,6 @@ def get_4star_prob(pity):
         return 1.0
 
 # 模擬抽卡
-
 def simulate_fixed_draws_detailed(total_draws=450):
     pity_5 = 0
     pity_4 = 0
@@ -164,5 +163,10 @@ if st.button("開始模擬！"):
 
 st.subheader("📜 過往模擬記錄（最多顯示5次）")
 for i, record in enumerate(reversed(st.session_state["history"][-5:]), 1):
-    st.write(f"第 {-i} 次模擬：UP={record['UP角色']} 常駐={record['常駐角色']} 4★={record['4star']}")
+    # 安全存取舊資料格式
+    up = record.get("UP角色", record.get("A", 0))
+    standard = record.get("常駐角色", record.get("B", 0))
+    four_star = record.get("4star", 0)
+    st.write(f"第 {-i} 次模擬：UP={up} 常駐={standard} 4★={four_star}")
+
 
